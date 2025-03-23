@@ -9,8 +9,21 @@ class FetchWrapper {
     this.baseURL = baseURL;
   }
 
-  get(endpoint: string): Promise<Data> {
-    return fetch(this.baseURL + endpoint).then((response) => response.json());
+  // get(endpoint: string): Promise<Data> {
+  //   return fetch(this.baseURL + endpoint).then((response) => response.json());
+  // }
+
+  async get(endpoint: string): Promise<Data> {
+    try {
+      const response = await fetch(this.baseURL + endpoint);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
   }
 
   put(endpoint: string, body: any): Promise<any> {
